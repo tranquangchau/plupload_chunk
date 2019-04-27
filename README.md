@@ -1,8 +1,9 @@
 # plupload_chunk
 php upload file big by chunk
 
-library
+library main
 - plupload
+- jquery
 
 feature: 
 - upload 1, more file to server php
