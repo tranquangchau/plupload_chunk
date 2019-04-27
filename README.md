@@ -6,7 +6,7 @@ library main
 - jquery
 
 feature: 
-- upload 1, more file to server php
+- upload 1, more file to server php by ajax
 - show status percent download, and complement
 - check file type can upload
 - check size file upload
