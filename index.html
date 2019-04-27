@@ -1,0 +1,168 @@
+
+<!DOCTYPE html><html dir="ltr" lang="en-US">
+<head>
+	<meta charset="UTF-8" />
+	<!-- Plupload Rules -->
+		<title>Br-o-upload</title>
+	    	<meta name="msvalidate.01" content="CF6A500C2AC11792DD10D5D7A77C685D" />
+    <link href="/favicon.ico" rel="shortcut icon" />
+
+	<link type="text/css" rel="stylesheet" href="lib/bootstrap.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="lib/font-awesome.min.css" media="screen" />
+
+    <!--[if lte IE 7]>
+   	<link rel="stylesheet" type="text/css" href="https://www.plupload.com/css/my_ie_lte7.css" />
+    <![endif]-->
+
+	<!--[if IE]>
+	<link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400italic" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:600italic" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:700italic" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet" type="text/css">
+	<link href="//fonts.googleapis.com/css?family=Bree+Serif:400" rel="stylesheet" type="text/css">
+	<![endif]-->
+
+	
+    <!--[if IE 7]>
+    	<link rel="stylesheet" href="https://www.plupload.com/css/font-awesome-ie7.min.css">
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+    <script src="https://www.plupload.com/js/html5shiv.js"></script>
+    <![endif]-->
+
+	<script type="text/javascript" src="lib/jquery.js" charset="UTF-8"></script>
+
+	<script type="text/javascript" src="lib/plupload.full.min.js" charset="UTF-8"></script>
+
+</head>
+<body class="examples examples-core">
+
+
+<section id="content">
+	<div class="container">
+		<div class="page-header pull-left">
+						<h1>Upload File</h1>
+					</div>
+
+		<div class="clearfix"> </div>
+		
+		
+
+<ul class="nav nav-tabs" id="example-tabs">
+	<li class="active">
+		<a href="#">Core API</a>
+	</li>
+</ul>
+<div id="example">
+
+<p>Tool upload basic file to server.</p>
+	
+<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+<br />
+
+<div id="container">
+    <a id="pickfiles" href="javascript:;">[Select files]</a> 
+    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
+</div>
+
+<br />
+<p>Result:</p>
+<pre id="console"></pre>
+
+
+<script type="text/javascript">
+// Custom example logic
+
+var uploader = new plupload.Uploader({
+	runtimes : 'html5,flash,silverlight,html4',
+	
+	browse_button : 'pickfiles', // you can pass in id...
+	container: document.getElementById('container'), // ... or DOM Element itself
+	
+	url : "upload.php",
+	chunk_size: '200kb',
+    max_retries: 3,
+	filters : {
+		max_file_size : '128mb',
+		mime_types: [
+			{title : "Image files", extensions : "jpg,gif,png"},
+			{title : "Zip files", extensions : "zip"}
+		]
+	},
+
+	// Flash settings
+	flash_swf_url : '/plupload/js/Moxie.swf',
+
+	// Silverlight settings
+	silverlight_xap_url : '/plupload/js/Moxie.xap',
+	
+
+	init: {
+		PostInit: function() {
+			document.getElementById('filelist').innerHTML = '';
+
+			document.getElementById('uploadfiles').onclick = function() {
+				uploader.start();
+				return false;
+			};
+		},
+
+		FilesAdded: function(up, files) {
+			plupload.each(files, function(file) {
+				document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+			});
+		},
+
+		UploadProgress: function(up, file) {
+			document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+		},
+
+		Error: function(up, err) {
+			document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+		},		
+		FileUploaded: function(up, file, info) {
+			
+			//console.log('1');
+			//console.log(up)
+			//console.log(file.name)
+			//console.log(JSON.parse(info.response).result)
+			var link = JSON.parse(info.response).result;
+			var contnt = '<a href="'+link+'">'+file.name+'</a>';
+			document.getElementById('console').innerHTML += "\FileUploaded #" + contnt +"\n";
+		},UploadComplete: function(up, file, info) {
+			//console.log(up,err)
+			console.log('2');
+			//console.log(up)
+			//console.log(file)
+			//console.log(info)
+			//document.getElementById('console').innerHTML += "\UploadComplete #" + err + ": " + err.message;
+		}
+	}
+});
+
+uploader.init();
+
+</script>
+
+
+</div>
+
+<br />
+
+
+
+	</div>
+</section>
+
+
+
+
+</script>
+
+</body>
+</html>
